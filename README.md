@@ -15,9 +15,11 @@ Open http://localhost:3000
 
 The desk is at `/admin`.
 
-Default password: `ceylon-admin`
+There is no password in the code. Once Firebase is configured (see **Contact messages** below), the desk asks you to sign in with the admin email and password you created in Firebase Authentication. That one sign-in also covers messages, notes, places and trip plans, and Firestore enforces it with `firestore.rules`.
 
-Change it under Site details. The password lives in the site file, so it only keeps casual visitors out. It is not server login.
+Until Firebase is configured, the desk opens without a login. That is safe because it only changes your own browser; nothing reaches other visitors until you publish. Add your Firebase settings under **Site** first to turn the sign-in on.
+
+In Firebase → Authentication → Settings → User actions, turn off **Enable create (sign-up)** so nobody else can register an account.
 
 Edits are saved in this browser immediately, so you can preview them. Other people still see the published file until you export and redeploy.
 
@@ -51,6 +53,18 @@ Without Firebase configured, messages are only saved in the visitor's own browse
 8. In `/admin` → **Messages**, sign in with the admin email and password from step 3.
 
 The Firebase config values are public by design. What protects your inbox is the rules file: the public can only create messages that pass the size checks, and only your admin account can read or delete them. Do not reuse your Firebase password anywhere else. Consider also enabling App Check or a quota alert in the Firebase console if the form is ever spammed.
+
+## Places and trip plans in Firestore
+
+With Firebase configured, places and trip plans can live in Firestore (collections `places` and `trips`, plus a `meta/content` marker) instead of `src/data/content.ts`. The site loads them when it starts, keeps a copy in the browser so later visits render instantly, and uses them in place of the site file.
+
+1. Publish the current `firestore.rules` (it now allows everyone to read `places`, `trips` and `meta`, and only your admin email to write).
+2. Open `/admin` → **Places** or **Trip plans** and sign in with your Firebase admin email.
+3. Click **Upload current places and trips to Firestore** once. (Your first save also does this automatically.)
+
+From then on, saving or deleting a place or trip in the desk updates the live site straight away, with no redeploy. Places and trips added this way open at `/destinations/?slug=...` and `/trips/?slug=...`; the ones already in `content.ts` keep their normal addresses.
+
+Site details (name, contact, hero text, Firebase settings) still come from `content.ts`, so keep using **Download content.ts** for those. Before the first upload, or if Firebase is not configured, everything works as before.
 
 ## Notes (reviews)
 

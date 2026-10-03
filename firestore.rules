@@ -1,0 +1,70 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Replace the address below with the admin email you created in Firebase Authentication.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == '<admin email>';
+    }
+
+    match /messages/{id} {
+      // Anyone may leave a message, with strict field and size checks.
+      allow create: if request.resource.data.keys().hasOnly(
+          ['name', 'email', 'phone', 'subject', 'message', 'trip', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 120
+        && request.resource.data.email is string && request.resource.data.email.size() > 3 && request.resource.data.email.size() <= 200
+        && request.resource.data.phone is string && request.resource.data.phone.size() <= 60
+        && request.resource.data.subject is string && request.resource.data.subject.size() <= 200
+        && request.resource.data.message is string && request.resource.data.message.size() > 0 && request.resource.data.message.size() <= 5000
+        && request.resource.data.trip is string && request.resource.data.trip.size() <= 200
+        && request.resource.data.createdAt == request.time;
+
+      // Only your admin account may read or delete.
+      allow read, delete: if isAdmin();
+
+      allow update: if false;
+    }
+
+    // Places, trip plans and the marker that says they are in use.
+    // Everyone can read them; only the admin can change them.
+    match /places/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /trips/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /meta/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /reviews/{id} {
+      // Anyone may send a note, but it is created hidden (approved == false).
+      allow create: if request.resource.data.keys().hasOnly(
+          ['name', 'rating', 'comment', 'locale', 'targetType', 'targetSlug', 'approved', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 120
+        && request.resource.data.rating is int && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+        && request.resource.data.comment is string && request.resource.data.comment.size() > 0 && request.resource.data.comment.size() <= 2000
+        && request.resource.data.locale in ['en', 'fr', 'es', 'de', 'ru', 'zh', 'ja']
+        && request.resource.data.targetType in ['site', 'destination', 'trip']
+        && request.resource.data.targetSlug is string && request.resource.data.targetSlug.size() <= 100
+        && request.resource.data.approved == false
+        && request.resource.data.createdAt == request.time;
+
+      // The admin can add notes that are visible straight away.
+      allow create: if isAdmin();
+
+      // Visitors can read approved notes only. The admin can read everything.
+      allow read: if resource.data.approved == true || isAdmin();
+
+      // Only the admin can approve, hide, or delete.
+      allow update, delete: if isAdmin();
+    }
+  }
+}
