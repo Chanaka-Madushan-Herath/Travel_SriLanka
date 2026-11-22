@@ -527,7 +527,184 @@ a:hover .logo-mark {
   transform: scale(0.96);
 }
 
+/* ---------- Photo hero slideshow ---------- */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1400ms ease;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+}
+
+.hero-slide-img {
+  transform: scale(1.08);
+  transition: transform 8000ms linear;
+}
+
+.hero-slide.is-active .hero-slide-img {
+  transform: scale(1);
+}
+
+.theme-swap {
+  animation: rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.theme-progress {
+  width: 0;
+  animation-name: grow;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.theme-progress.is-paused {
+  animation-play-state: paused;
+}
+
+@keyframes grow {
+  to {
+    width: 100%;
+  }
+}
+
+.scroll-dot {
+  width: 18px;
+  height: 28px;
+  border: 1.5px solid rgba(255, 253, 248, 0.6);
+  border-radius: 999px;
+  position: relative;
+}
+
+.scroll-dot::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #c9842a;
+  animation: scroll-hint 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Mood tiles ---------- */
+.mood-img {
+  transition: transform 1100ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 600ms ease;
+}
+
+.mood-tile:hover .mood-img,
+.mood-tile:focus-visible .mood-img {
+  transform: scale(1.08);
+  filter: saturate(1.15);
+}
+
+.mood-tile {
+  box-shadow: 0 18px 40px -28px rgba(16, 40, 36, 0.7);
+  transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
+}
+
+.mood-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 50px -28px rgba(16, 40, 36, 0.8);
+}
+
+.mood-arrow {
+  display: inline-block;
+  transition: transform 300ms ease;
+}
+
+.mood-tile:hover .mood-arrow {
+  transform: translateX(6px);
+}
+
+/* ---------- Full-width photo band ---------- */
+.photo-band {
+  background-color: #102824;
+  background-image: var(--band);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+@media (hover: none), (max-width: 768px) {
+  .photo-band {
+    background-attachment: scroll;
+  }
+}
+
+/* Inquiry and plan-your-trip calls to action. */
+.cta-glow {
+  box-shadow: 0 0 0 0 rgba(201, 132, 42, 0.55);
+  animation: cta-pulse 2.8s ease-out infinite;
+}
+
+@keyframes cta-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 132, 42, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(201, 132, 42, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 132, 42, 0);
+  }
+}
+
+.start-card {
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 260ms ease;
+}
+
+.start-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 44px -24px rgba(16, 40, 36, 0.6);
+}
+
+.start-card .start-arrow {
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.start-card:hover .start-arrow {
+  transform: translateX(4px) rotate(-8deg);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .start-card:hover,
+  .start-card:hover .start-arrow {
+    transform: none;
+  }
+
+  .cta-glow {
+    animation: none;
+  }
+
+  .hero-slide-img,
+  .hero-slide.is-active .hero-slide-img,
+  .mood-tile:hover,
+  .mood-tile:hover .mood-img {
+    transform: none;
+  }
+
+  .photo-band {
+    background-attachment: scroll;
+  }
+
   html {
     scroll-behavior: auto;
   }

@@ -41,7 +41,6 @@ export function blankTrip(order: number): Trip {
     summary: emptyText(),
     description: emptyText(),
     durationDays: 3,
-    priceFromUsd: 0,
     pace: "moderate",
     groupSize: emptyText(),
     bestMonths: emptyText(),

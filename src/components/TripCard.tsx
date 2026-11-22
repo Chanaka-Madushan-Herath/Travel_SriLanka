@@ -2,7 +2,7 @@
 
 import { useSite } from "@/context/SiteContext";
 import type { Trip } from "@/lib/types";
-import { formatUsd, tx } from "@/lib/utils";
+import { tx } from "@/lib/utils";
 import Link from "next/link";
 import { tripHref } from "@/lib/links";
 import { Photo } from "./ui";
@@ -18,22 +18,23 @@ export function TripCard({ trip }: { trip: Trip }) {
         <span className="img-zoom">
           <Photo src={trip.image} alt={title} className="h-52 w-full object-cover" />
         </span>
-        <span className="absolute left-4 top-4 rounded-full bg-foam/95 px-3 py-1 text-sm font-semibold text-ink shadow-sm backdrop-blur">
+        <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-[linear-gradient(to_top,rgba(9,24,21,0.45),transparent)]" aria-hidden="true" />
+        <span className="absolute left-4 top-4 rounded-full bg-gold px-3 py-1 text-sm font-semibold text-ink shadow-sm">
           {trip.durationDays} {t.days}
+        </span>
+        <span className="absolute right-4 top-4 rounded-full bg-lagoon-deep/75 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-foam backdrop-blur">
+          {t.paces[trip.pace]}
         </span>
       </Link>
       <div className="p-5">
-        <p className="text-xs uppercase tracking-[0.18em] text-lagoon">{t.paces[trip.pace]}</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-lagoon">
+          {t.bestTime}: {tx(trip.bestMonths, locale)}
+        </p>
         <h3 className="font-display mt-2 text-3xl leading-tight">
           <Link href={href}>{title}</Link>
         </h3>
         <p className="mt-3 text-muted">{tx(trip.summary, locale)}</p>
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <p>
-            <span className="block text-xs uppercase tracking-[0.14em] text-muted">{t.guideFare}</span>
-            <span className="font-display text-2xl">{formatUsd(trip.priceFromUsd, locale)}</span>
-            <span className="mt-1 block text-xs text-muted">{t.perPerson}</span>
-          </p>
+        <div className="mt-5 flex justify-end">
           <Link href={href} className="btn btn-ink">
             {t.viewPlan}
           </Link>

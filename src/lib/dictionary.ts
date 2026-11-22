@@ -40,8 +40,6 @@ export type Dictionary = {
   viewPlan: string;
   days: string;
   from: string;
-  perPerson: string;
-  guideFare: string;
   bestTime: string;
   gettingThere: string;
   highlights: string;
@@ -138,7 +136,6 @@ export type Dictionary = {
   imageUrl: string;
   region: string;
   duration: string;
-  price: string;
   destinationLinks: string;
   addDay: string;
   removeDay: string;
@@ -199,7 +196,7 @@ export const dictionary: Record<"en" | "fr" | "es" | "de" | "ru" | "zh" | "ja", 
     placesTitle: "Places with a reason to stay",
     placesLead: "Not a catalogue of everything on the island. These are the stops the trip plans are built around.",
     tripsTitle: "Routes you can actually follow",
-    tripsLead: "Day by day, with the nights named. Fares are a guide for a private car and a mid-range stay, not a live quote.",
+    tripsLead: "Day by day, with the nights named.",
     reviewsTitle: "Notes from the road",
     reviewsLead: "A few traveller notes, plus anything left on this browser.",
     seeAllReviews: "All notes",
@@ -210,8 +207,6 @@ export const dictionary: Record<"en" | "fr" | "es" | "de" | "ru" | "zh" | "ja", 
     viewPlan: "Open the plan",
     days: "days",
     from: "From",
-    perPerson: "per person, twin share",
-    guideFare: "Guide fare",
     bestTime: "Best time",
     gettingThere: "Getting there",
     highlights: "Worth the stop",
@@ -314,7 +309,6 @@ export const dictionary: Record<"en" | "fr" | "es" | "de" | "ru" | "zh" | "ja", 
     imageUrl: "Image URL",
     region: "Region",
     duration: "Days",
-    price: "Guide fare (USD)",
     destinationLinks: "Place slugs, comma separated",
     addDay: "Add day",
     removeDay: "Remove day",

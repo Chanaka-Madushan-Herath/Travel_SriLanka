@@ -1,11 +1,13 @@
 "use client";
 
 import { DestinationCard } from "@/components/DestinationCard";
+import { InquiryButtons, StartBand } from "@/components/InquiryForms";
+import { PageHero } from "@/components/PageHero";
 import { ReviewSection } from "@/components/ReviewSection";
 import { TripCard } from "@/components/TripCard";
 import { DetailSkeleton, Photo, Reveal } from "@/components/ui";
 import { usePageTitle, useSite } from "@/context/SiteContext";
-import { formatUsd, sortByOrder, tx, txList } from "@/lib/utils";
+import { sortByOrder, tx, txList } from "@/lib/utils";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -30,17 +32,9 @@ export function TripList() {
 
   return (
     <div>
-      <header className="relative overflow-hidden bg-lagoon-deep text-foam">
-        <div className="hero-bg" aria-hidden="true">
-          <span className="hero-orb hero-orb-gold" />
-        </div>
-        <div className="relative mx-auto max-w-6xl px-5 py-16">
-          <h1 className="hero-rise font-display max-w-3xl text-5xl">{t.tripsTitle}</h1>
-          <p className="hero-rise mt-4 max-w-2xl text-lg text-foam/75" style={{ "--d": "140ms" } as React.CSSProperties}>
-            {t.tripsLead}
-          </p>
-        </div>
-      </header>
+      <PageHero slot="pageTrips" kicker={t.nav.trips} title={t.tripsTitle} lead={t.tripsLead}>
+        <InquiryButtons />
+      </PageHero>
       <div className="mx-auto max-w-6xl px-5 py-10">
         <label className="block max-w-sm">
           <span className="sr-only">{t.searchTrips}</span>
@@ -55,6 +49,9 @@ export function TripList() {
           ))}
         </div>
       </div>
+      <Reveal>
+        <StartBand />
+      </Reveal>
     </div>
   );
 }
@@ -96,17 +93,18 @@ export function TripDetail({ slug }: { slug: string }) {
         </Link>
         <h1 className="font-display mt-6 text-5xl">{title}</h1>
         <p className="mt-4 text-xl text-muted">{tx(trip.summary, locale)}</p>
-        <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat label={t.days} value={String(trip.durationDays)} />
-          <Stat label={t.guideFare} value={formatUsd(trip.priceFromUsd, locale)} />
           <Stat label={t.pace} value={t.paces[trip.pace]} />
           <Stat label={t.group} value={tx(trip.groupSize, locale)} />
         </dl>
-        <p className="mt-3 text-sm text-muted">{t.perPerson}</p>
         <p className="mt-6 text-lg leading-relaxed">{tx(trip.description, locale)}</p>
         <p className="mt-4 rounded-2xl bg-gold-soft px-4 py-3 text-sm">
           {t.bestTime}: {tx(trip.bestMonths, locale)}
         </p>
+        <div className="mt-6">
+          <InquiryButtons tone="light" tripSlug={trip.slug} />
+        </div>
         <h2 className="font-display mt-12 text-3xl">{t.itinerary}</h2>
         <ol className="mt-5 grid gap-4">
           {trip.itinerary.map((day, index) => (
@@ -138,6 +136,13 @@ export function TripDetail({ slug }: { slug: string }) {
             </div>
           </>
         ) : null}
+        <div className="mt-12 rounded-[28px] bg-lagoon-deep p-6 text-foam sm:p-8">
+          <h2 className="font-display text-3xl">{title}</h2>
+          <p className="mt-2 text-foam/75">{tx(trip.summary, locale)}</p>
+          <div className="mt-5">
+            <InquiryButtons tripSlug={trip.slug} />
+          </div>
+        </div>
         <ReviewSection targetType="trip" targetSlug={trip.slug} />
       </div>
     </article>

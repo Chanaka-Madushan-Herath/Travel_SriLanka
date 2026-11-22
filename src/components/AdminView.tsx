@@ -1,5 +1,6 @@
 "use client";
 
+import { ImagesSection } from "@/components/AdminImages";
 import { Field } from "@/components/ui";
 import { usePageTitle, useSite } from "@/context/SiteContext";
 import { blankDay, blankDestination, blankTrip, emptyText } from "@/lib/blank";
@@ -54,14 +55,14 @@ function fromLinesState(state: Record<Locale, string>): L10nList {
 
 const emptyFirebase: FirebaseSettings = { apiKey: "", authDomain: "", projectId: "", appId: "" };
 
-const copy: Record<Locale, { name: string; slug: string; days: string; price: string }> = {
-  en: { name: "Add an English name.", slug: "That slug is already used.", days: "Add at least one day.", price: "Enter a guide fare." },
-  fr: { name: "Ajoutez un nom en anglais.", slug: "Ce slug est déjà utilisé.", days: "Ajoutez au moins un jour.", price: "Indiquez un tarif." },
-  es: { name: "Añada un nombre en inglés.", slug: "Ese slug ya se usa.", days: "Añada al menos un día.", price: "Indique una tarifa." },
-  de: { name: "Fügen Sie einen englischen Namen hinzu.", slug: "Dieser Slug wird schon verwendet.", days: "Fügen Sie mindestens einen Tag hinzu.", price: "Geben Sie einen Richtpreis ein." },
-  ru: { name: "Добавьте английское название.", slug: "Такой slug уже используется.", days: "Добавьте хотя бы один день.", price: "Укажите ориентир цены." },
-  zh: { name: "请填写英文名称。", slug: "这个 slug 已被使用。", days: "至少添加一天。", price: "请填写参考费用。" },
-  ja: { name: "英語の名前を入れてください。", slug: "その slug は既に使われています。", days: "少なくとも一日追加してください。", price: "目安料金を入れてください。" },
+const copy: Record<Locale, { name: string; slug: string; days: string }> = {
+  en: { name: "Add an English name.", slug: "That slug is already used.", days: "Add at least one day." },
+  fr: { name: "Ajoutez un nom en anglais.", slug: "Ce slug est déjà utilisé.", days: "Ajoutez au moins un jour." },
+  es: { name: "Añada un nombre en inglés.", slug: "Ese slug ya se usa.", days: "Añada al menos un día." },
+  de: { name: "Fügen Sie einen englischen Namen hinzu.", slug: "Dieser Slug wird schon verwendet.", days: "Fügen Sie mindestens einen Tag hinzu." },
+  ru: { name: "Добавьте английское название.", slug: "Такой slug уже используется.", days: "Добавьте хотя бы один день." },
+  zh: { name: "请填写英文名称。", slug: "这个 slug 已被使用。", days: "至少添加一天。" },
+  ja: { name: "英語の名前を入れてください。", slug: "その slug は既に使われています。", days: "少なくとも一日追加してください。" },
 };
 
 export function AdminView() {
@@ -927,9 +928,7 @@ function SiteForm({ onSave }: { onSave: (settings: ReturnType<typeof useSite>["s
           <input className="field" value={draft.facebook} onChange={(event) => setDraft({ ...draft, facebook: event.target.value })} />
         </Field>
       </div>
-      <Field label={t.heroImage}>
-        <input className="field" value={draft.heroImage} onChange={(event) => setDraft({ ...draft, heroImage: event.target.value })} />
-      </Field>
+      <ImagesSection draft={draft} setDraft={setDraft} />
       <Field label={t.web3formsKey} hint={t.web3formsHelp}>
         <input className="field" value={draft.web3formsKey} onChange={(event) => setDraft({ ...draft, web3formsKey: event.target.value.trim() })} />
       </Field>
@@ -1080,10 +1079,6 @@ function TripEditor({
           setError(copy[locale].name);
           return;
         }
-        if (!Number.isFinite(trip.priceFromUsd) || trip.priceFromUsd < 0) {
-          setError(copy[locale].price);
-          return;
-        }
         if (trip.itinerary.length === 0) {
           setError(copy[locale].days);
           return;
@@ -1097,7 +1092,6 @@ function TripEditor({
           ...trip,
           slug,
           durationDays: Math.max(1, Number(trip.durationDays) || trip.itinerary.length),
-          priceFromUsd: Number(trip.priceFromUsd) || 0,
           order: Number(trip.order) || 0,
           includes: fromLinesState(includes),
           excludes: fromLinesState(excludes),
@@ -1121,9 +1115,6 @@ function TripEditor({
         ) : null}
         <Field label={t.duration}>
           <input className="field" type="number" min={1} value={trip.durationDays} onChange={(event) => setTrip({ ...trip, durationDays: Number(event.target.value) })} />
-        </Field>
-        <Field label={t.price}>
-          <input className="field" type="number" min={0} value={trip.priceFromUsd} onChange={(event) => setTrip({ ...trip, priceFromUsd: Number(event.target.value) })} />
         </Field>
         <Field label={t.pace}>
           <select className="field" value={trip.pace} onChange={(event) => setTrip({ ...trip, pace: event.target.value as Pace })}>

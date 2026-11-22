@@ -1,6 +1,7 @@
 "use client";
 
 import { ContactDetails } from "@/components/Footer";
+import { PageHero } from "@/components/PageHero";
 import { Field } from "@/components/ui";
 import { usePageTitle, useSite } from "@/context/SiteContext";
 import { firebaseReady, submitRemoteMessage } from "@/lib/firebase";
@@ -64,12 +65,7 @@ export function ContactView() {
 
   return (
     <div>
-      <header className="bg-lagoon-deep text-foam">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <h1 className="font-display text-5xl">{t.contactTitle}</h1>
-          <p className="mt-4 max-w-2xl text-lg text-foam/75">{t.contactLead}</p>
-        </div>
-      </header>
+      <PageHero slot="pageContact" kicker={t.nav.contact} title={t.contactTitle} lead={t.contactLead} />
       <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 lg:grid-cols-[1.2fr_0.8fr]">
         <form onSubmit={onSubmit} className="rounded-[28px] border border-line bg-foam p-5 sm:p-7">
           <div className="grid gap-4 sm:grid-cols-2">

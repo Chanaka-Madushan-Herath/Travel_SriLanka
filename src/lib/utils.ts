@@ -40,14 +40,6 @@ export function localeTag(locale: Locale): string {
   return tags[locale];
 }
 
-export function formatUsd(amount: number, locale: Locale): string {
-  return new Intl.NumberFormat(localeTag(locale), {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
 export function formatDate(iso: string, locale: Locale): string {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;

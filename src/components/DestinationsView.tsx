@@ -3,6 +3,7 @@
 import { DestinationCard } from "@/components/DestinationCard";
 import { ReviewSection } from "@/components/ReviewSection";
 import { TripCard } from "@/components/TripCard";
+import { PageHero } from "@/components/PageHero";
 import { DetailSkeleton, Photo, Reveal } from "@/components/ui";
 import { usePageTitle, useSite } from "@/context/SiteContext";
 import type { RegionId } from "@/lib/types";
@@ -37,20 +38,7 @@ export function DestinationList() {
 
   return (
     <div>
-      <header className="relative overflow-hidden bg-lagoon-deep text-foam">
-        <div className="hero-bg" aria-hidden="true">
-          <span className="hero-orb hero-orb-gold" />
-        </div>
-        <div className="relative mx-auto max-w-6xl px-5 py-16">
-          <p className="hero-rise text-xs uppercase tracking-[0.2em] text-gold">{txName(locale)}</p>
-          <h1 className="hero-rise font-display mt-3 max-w-3xl text-5xl" style={{ "--d": "100ms" } as React.CSSProperties}>
-            {t.placesTitle}
-          </h1>
-          <p className="hero-rise mt-4 max-w-2xl text-lg text-foam/75" style={{ "--d": "220ms" } as React.CSSProperties}>
-            {t.placesLead}
-          </p>
-        </div>
-      </header>
+      <PageHero slot="pagePlaces" kicker={txName(locale)} title={t.placesTitle} lead={t.placesLead} />
       <div className="mx-auto max-w-6xl px-5 py-10">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <label className="block md:max-w-sm md:flex-1">

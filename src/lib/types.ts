@@ -38,7 +38,6 @@ export type Trip = {
   summary: L10n;
   description: L10n;
   durationDays: number;
-  priceFromUsd: number;
   pace: Pace;
   groupSize: L10n;
   bestMonths: L10n;
@@ -93,6 +92,24 @@ export type ContactMessage = {
   createdAt: string;
 };
 
+/** Photo spots on the home page and page headers that the admin can replace. */
+export type ImageSlot =
+  | "heroWildlife"
+  | "heroBeach"
+  | "heroMountains"
+  | "tileHeritage"
+  | "tileWildlife"
+  | "tileBeach"
+  | "tileMountains"
+  | "statsBg"
+  | "bandBg"
+  | "pageTrips"
+  | "pagePlaces"
+  | "pageNotes"
+  | "pageContact"
+  | "pageInquiry"
+  | "pagePlan";
+
 export type SiteSettings = {
   siteName: L10n;
   tagline: L10n;
@@ -111,6 +128,8 @@ export type SiteSettings = {
   facebook: string;
   web3formsKey: string;
   firebase?: FirebaseSettings;
+  /** Image links for the photo spots. Empty or missing means the built-in photo. */
+  images?: Partial<Record<ImageSlot, string>>;
 };
 
 export type Database = {
